@@ -12,11 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install Dependencies
-        run: pip install -r tourism_package_prediction/deployment/requirements.txt
+        run: pip install -r Tourism_Package_Prediction1/deployment/requirements.txt
       - name: Upload dataset to Hugging Face Hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: python tourism_package_prediction/model_building/data_register.py
+        run: python Tourism_Package_Prediction1/model_building/data_register.py
 
   data-prep:
     needs: register-dataset
@@ -24,11 +24,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install Dependencies
-        run: pip install -r tourism_package_prediction/deployment/requirements.txt
+        run: pip install -r Tourism_Package_Prediction1/deployment/requirements.txt
       - name: Run Data Preparation
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: python tourism_package_prediction/model_building/prep.py
+        run: python Tourism_Package_Prediction1/model_building/prep.py
 
   model-training:
     needs: data-prep
@@ -36,7 +36,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install Dependencies
-        run: pip install -r tourism_package_prediction/deployment/requirements.txt
+        run: pip install -r Tourism_Package_Prediction1/deployment/requirements.txt
       - name: Start MLflow Server in background
         run: |
           nohup mlflow ui --host 0.0.0.0 --port 5000 &
@@ -44,7 +44,7 @@ jobs:
       - name: Train Model and Log to MLflow
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: python tourism_package_prediction/model_building/train.py
+        run: python Tourism_Package_Prediction1/model_building/train.py
 
   deploy-hosting:
     needs: [model-training, data-prep, register-dataset]
@@ -52,8 +52,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install Dependencies
-        run: pip install -r tourism_package_prediction/deployment/requirements.txt
+        run: pip install -r Tourism_Package_Prediction1/deployment/requirements.txt
       - name: Deploy to Hugging Face Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: python tourism_package_prediction/hosting/hosting.py
+        run: python Tourism_Package_Prediction1/hosting/hosting.py
